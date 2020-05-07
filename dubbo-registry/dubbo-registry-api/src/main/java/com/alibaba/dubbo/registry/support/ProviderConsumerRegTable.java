@@ -27,6 +27,9 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
+ * 缓存的服务提供者和服务消费者的注册表
+ * Key为从URL获取到的ServiceKey
+ * Value为ProviderInvokerWrapper
  * @date 2017/11/23
  */
 public class ProviderConsumerRegTable {
@@ -47,6 +50,7 @@ public class ProviderConsumerRegTable {
     public static Set<ProviderInvokerWrapper> getProviderInvoker(String serviceUniqueName) {
         Set<ProviderInvokerWrapper> invokers = providerInvokers.get(serviceUniqueName);
         if (invokers == null) {
+            // 返回一次为空的集合，最佳实践
             return Collections.emptySet();
         }
         return invokers;

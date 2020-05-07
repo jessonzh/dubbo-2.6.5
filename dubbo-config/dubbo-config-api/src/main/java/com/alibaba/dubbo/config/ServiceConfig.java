@@ -483,10 +483,12 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
 
             // export to local if the config is not remote (export to remote only when config is remote)
             if (!Constants.SCOPE_REMOTE.toString().equalsIgnoreCase(scope)) {
+                // 本地暴露
                 exportLocal(url);
             }
             // export to remote if the config is not local (export to local only when config is local)
             if (!Constants.SCOPE_LOCAL.toString().equalsIgnoreCase(scope)) {
+                // 远程暴露
                 if (logger.isInfoEnabled()) {
                     logger.info("Export dubbo service " + interfaceClass.getName() + " to url " + url);
                 }
@@ -510,6 +512,9 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                         Invoker<?> invoker = proxyFactory.getInvoker(ref, (Class) interfaceClass, registryURL.addParameterAndEncoded(Constants.EXPORT_KEY, url.toFullString()));
                         DelegateProviderMetaDataInvoker wrapperInvoker = new DelegateProviderMetaDataInvoker(invoker, this);
 
+                        // 针对不同的protocol，调用不同的export方法
+                        // 将Invoker利用不同的Protocol转换成Exporter
+                        // RegistryProtocol：注册中心协议
                         Exporter<?> exporter = protocol.export(wrapperInvoker);
                         exporters.add(exporter);
                     }

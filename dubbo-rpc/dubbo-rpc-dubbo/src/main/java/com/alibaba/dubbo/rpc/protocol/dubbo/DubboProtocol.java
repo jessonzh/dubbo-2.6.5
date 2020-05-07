@@ -412,8 +412,10 @@ public class DubboProtocol extends AbstractProtocol {
         try {
             // connection should be lazy
             if (url.getParameter(Constants.LAZY_CONNECT_KEY, false)) {
+                // 如果配置了lazy属性，则真实调用的时候才会创建TCP连接
                 client = new LazyConnectExchangeClient(url, requestHandler);
             } else {
+                // 立即与远程连接
                 client = Exchangers.connect(url, requestHandler);
             }
         } catch (RemotingException e) {

@@ -330,6 +330,7 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
 
         //attributes are stored by system context.
         StaticContext.getSystemContext().putAll(attributes);
+        // 第二步把Invoker通过动态代理转换成实现用户接口的
         ref = createProxy(map);
         ConsumerModel consumerModel = new ConsumerModel(getUniqueServiceName(), this, ref, interfaceClass.getMethods());
         ApplicationModel.initConsumerModel(getUniqueServiceName(), consumerModel);
@@ -391,6 +392,7 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
             }
 
             if (urls.size() == 1) {
+                // 单注册中心服务引用（消费）
                 invoker = refprotocol.refer(interfaceClass, urls.get(0));
             } else {
                 List<Invoker<?>> invokers = new ArrayList<Invoker<?>>();
@@ -401,6 +403,7 @@ public class ReferenceConfig<T> extends AbstractReferenceConfig {
                         registryURL = url; // use last registry url
                     }
                 }
+                // 通过Cluster将多个Invoker转换成一个Invoker
                 if (registryURL != null) { // registry url is available
                     // use AvailableCluster only when register's cluster is available
                     URL u = registryURL.addParameter(Constants.CLUSTER_KEY, AvailableCluster.NAME);

@@ -62,6 +62,11 @@ public class ReferenceBean<T> extends ReferenceConfig<T> implements FactoryBean,
         SpringExtensionFactory.addApplicationContext(applicationContext);
     }
 
+    /**
+     * 实现了FactoryBean接口，当IoC容器需要自动注入对象的时候，调用getObject()方法
+     * @return
+     * @throws Exception
+     */
     @Override
     public Object getObject() throws Exception {
         return get();
